@@ -19,11 +19,10 @@ $$
                                  CHR(9) || ',updated_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
                                  CHR(9) || ',UNIQUE (stock_ticker_code, tick_time)' || CHR(10) ||
                                  CHR(9) || ',UNIQUE (stock_ticker_code, ticker_data_seq_num)' || CHR(10) ||
-                                        ');';
-        _heiken_ddl_script  TEXT := 'BEGIN;' || CHR(10) || CHR(10) ||
-                                    _drop_table_query || CHR(10) || CHR(10) ||
-                                    _data_table_ddl || CHR(10) || CHR(10) ||
-                                    'COMMIT;';
+                                        ')';
+        _heiken_ddl_script  TEXT := _drop_table_query || CHR(10) || CHR(10) ||
+                                    _data_table_ddl || CHR(10) ||
+                                    ';';
     BEGIN
         RETURN _heiken_ddl_script;
     end;

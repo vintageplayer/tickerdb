@@ -4,28 +4,30 @@ LANGUAGE plpgsql AS
 $$
     DECLARE
         _relation_name  TEXT := 'data_' || _interval_value || '_' || _interval_unit;
-        _common_select_columns  TEXT := CHR(9) || 'tick_time' || CHR(10) ||
-                                        CHR(9) || ',stock_ticker_code' || CHR(10) ||
-                                        CHR(9) || ',opening_price' || CHR(10) ||
-                                        CHR(9) || ',high_price' || CHR(10) ||
-                                        CHR(9) || ',low_price' || CHR(10) ||
-                                        CHR(9) || ',closing_price' || CHR(10) ||
-                                        CHR(9) || ',volume';
+        _data_alias TEXT := 'dd' || _interval_value || LEFT(_interval_unit, 1);
+        _stg_alias TEXT := 'sd' || _interval_value || LEFT(_interval_unit, 1);
+        _common_select_columns  TEXT := CHR(9) || '__alias__.tick_time' || CHR(10) ||
+                                        CHR(9) || ',__alias__.stock_ticker_code' || CHR(10) ||
+                                        CHR(9) || ',__alias__.opening_price' || CHR(10) ||
+                                        CHR(9) || ',__alias__.high_price' || CHR(10) ||
+                                        CHR(9) || ',__alias__.low_price' || CHR(10) ||
+                                        CHR(9) || ',__alias__.closing_price' || CHR(10) ||
+                                        CHR(9) || ',__alias__.volume';
         _data_table_select_query    TEXT := 'SELECT' || CHR(10) ||
-                                            _common_select_columns || CHR(10) ||
-                                            CHR(9) || ',ticker_data_seq_num' || CHR(10) ||
+                                            REPLACE(_common_select_columns, '__alias__', _data_alias) || CHR(10) ||
+                                            CHR(9) || ',' || _data_alias || '.ticker_data_seq_num' || CHR(10) ||
                                             'FROM' || CHR(10) ||
-                                            CHR(9) || 'data.' || _relation_name || ' dd2m';
+                                            CHR(9) || 'data.' || _relation_name || ' ' || _data_alias;
         _stg_table_select_query    TEXT := 'SELECT' || CHR(10) ||
-                                           _common_select_columns || CHR(10) ||
+                                           REPLACE(_common_select_columns, '__alias__', _stg_alias) || CHR(10) ||
                                            CHR(9) || ',(' || CHR(10) ||
                                            CHR(9) || CHR(9) || 'SELECT max(d.ticker_data_seq_num)' || CHR(10) ||
                                            CHR(9) || CHR(9) || 'FROM data.' || _relation_name || ' d' || CHR(10) ||
-                                           CHR(9) || ') + ROW_NUMBER() OVER(ORDER BY tick_time)' || CHR(10) ||
+                                           CHR(9) || ') + ROW_NUMBER() OVER(ORDER BY ' || _stg_alias || '.tick_time)' || CHR(10) ||
                                            'FROM' || CHR(10) ||
-                                           CHR(9) || 'stg.' || _relation_name || ' sd2m';
+                                           CHR(9) || 'stg.' || _relation_name || ' ' || _stg_alias;
         _stg_table_where_clause    TEXT := 'WHERE' || CHR(10) ||
-                                           CHR(9) || 'sd2m.tick_time > (' || CHR(10) ||
+                                           CHR(9) || _stg_alias ||'.tick_time > (' || CHR(10) ||
                                            CHR(9) || CHR(9) || 'SELECT max(tick_time) FROM data.' || _relation_name || CHR(10) ||
                                            CHR(9) || ')';
         _create_view_dll    TEXT := 'CREATE VIEW data.' || _relation_name || '_complete AS' || CHR(10) ||

@@ -19,12 +19,11 @@ CREATE OR REPLACE FUNCTION heiken.f_get_create_heiken_complete_data_view_script(
         _stg_select_query TEXT := 'SELECT' || CHR(10) ||
                                           replace(_col_list, '__alias__', _stg_alias) || CHR(10) ||
                                           'FROM heiken.' || _relation_name || '_stg ' || _stg_alias;
-        _complete_view_ddl  TEXT := 'BEGIN;' || CHR(10) || CHR(10) ||
-                                    'CREATE OR REPLACE VIEW heiken.' || _relation_name || '_complete AS' || CHR(10) ||
+        _complete_view_ddl  TEXT := 'CREATE OR REPLACE VIEW heiken.' || _relation_name || '_complete AS' || CHR(10) ||
                                     _data_select_query || CHR(10) ||
                                     'UNION' || CHR(10) ||
-                                    _stg_select_query || CHR(10) || CHR(10) ||
-                                    'COMMIT;';
+                                    _stg_select_query || CHR(10) ||
+                                    ';';
     BEGIN
         RETURN _complete_view_ddl;
     end;

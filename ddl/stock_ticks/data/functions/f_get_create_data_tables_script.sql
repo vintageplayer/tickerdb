@@ -18,7 +18,7 @@ AS
                         CHR(9) || ',updated_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
                         CHR(9) || ',UNIQUE (stock_ticker_code, tick_time)' || CHR(10) ||
                         CHR(9) || ',UNIQUE (stock_ticker_code, ticker_data_seq_num)';
-    _create_data_table_ddl TEXT := 'CREATE TABLE stg.' || _data_table_name || '(' ||CHR(10) ||
+    _create_data_table_ddl TEXT := 'CREATE TABLE data.' || _data_table_name || '(' ||CHR(10) ||
                                 _column_ddl || CHR(10) ||
                                 ');';
     _create_stg_table_ddl  TEXT := 'CREATE TABLE stg.' || _data_table_name || '(' ||CHR(10) ||
@@ -29,14 +29,12 @@ AS
     _data_last_updated_trigger_ddl  TEXT :=  f_get_create_last_updated_at_trigger_script('data', _data_table_name);
     _stg_last_updated_trigger_ddl  TEXT :=  f_get_create_last_updated_at_trigger_script('stg', _data_table_name);
 
-    _create_tables_script   TEXT := 'BEGIN;' || CHR(10) || CHR(10) ||
-                                    '-- DROP TABLE data.' || _data_table_name || ';' || CHR(10) || CHR(10) ||
+    _create_tables_script   TEXT := '-- DROP TABLE data.' || _data_table_name || ';' || CHR(10) || CHR(10) ||
                                     _create_data_table_ddl || CHR(10) || CHR(10) ||
                                     _data_last_updated_trigger_ddl || CHR(10) || CHR(10) ||
                                     '-- DROP TABLE stg.' || _data_table_name || ';' || CHR(10) || CHR(10) ||
                                     _create_stg_table_ddl || CHR(10) || CHR(10) ||
-                                    _stg_last_updated_trigger_ddl || CHR(10) || CHR(10) ||
-                                    'COMMIT;';
+                                    _stg_last_updated_trigger_ddl;
 
     BEGIN
         RETURN _create_tables_script;
