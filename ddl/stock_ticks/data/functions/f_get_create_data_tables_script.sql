@@ -5,19 +5,19 @@ AS
     $$
     DECLARE
     _data_table_name  TEXT := 'data_' || _interval_value || '_' || _interval_unit;
-    _column_ddl TEXT := 'id SERIAL' || CHR(10) ||
-           ',tick_time timestamp WITH TIME ZONE NOT NULL' || CHR(10) ||
-           ',stock_ticker_code TEXT NOT NULL' || CHR(10) ||
-           ',opening_price FLOAT8' || CHR(10) ||
-           ',high_price FLOAT8' || CHR(10) ||
-           ',low_price FLOAT8' || CHR(10) ||
-           ',closing_price FLOAT8' || CHR(10) ||
-           ',volume BIGINT' || CHR(10) ||
-           ',ticker_data_seq_num BIGINT' || CHR(10) ||
-           ',created_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
-           ',updated_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
-           ',UNIQUE (stock_ticker_code, tick_time)' || CHR(10) ||
-           ',UNIQUE (stock_ticker_code, ticker_data_seq_num)';
+    _column_ddl TEXT := CHR(9) || 'id SERIAL' || CHR(10) ||
+                        CHR(9) || ',tick_time timestamp WITH TIME ZONE NOT NULL' || CHR(10) ||
+                        CHR(9) || ',stock_ticker_code TEXT NOT NULL' || CHR(10) ||
+                        CHR(9) || ',opening_price FLOAT8' || CHR(10) ||
+                        CHR(9) || ',high_price FLOAT8' || CHR(10) ||
+                        CHR(9) || ',low_price FLOAT8' || CHR(10) ||
+                        CHR(9) || ',closing_price FLOAT8' || CHR(10) ||
+                        CHR(9) || ',volume BIGINT' || CHR(10) ||
+                        CHR(9) || ',ticker_data_seq_num BIGINT' || CHR(10) ||
+                        CHR(9) || ',created_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
+                        CHR(9) || ',updated_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
+                        CHR(9) || ',UNIQUE (stock_ticker_code, tick_time)' || CHR(10) ||
+                        CHR(9) || ',UNIQUE (stock_ticker_code, ticker_data_seq_num)';
     _create_data_table_ddl TEXT := 'CREATE TABLE stg.' || _data_table_name || '(' ||CHR(10) ||
                                 _column_ddl || CHR(10) ||
                                 ');';
