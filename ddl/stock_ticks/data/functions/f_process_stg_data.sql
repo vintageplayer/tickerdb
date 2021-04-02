@@ -34,10 +34,8 @@ $$
                                 CHR(9) || 'AND stg.' || _table_name || '.low_price = d.low_price' || CHR(10) ||
                                 CHR(9) || 'AND stg.' || _table_name || '.closing_price = d.closing_price' || CHR(10) ||
                                 CHR(9) || 'AND stg.' || _table_name || '.volume = d.volume ;';
-        _complete_txn   TEXT := 'BEGIN;' || CHR(10) || CHR(10) ||
-                                _insert_query || CHR(10) || CHR(10) ||
-                                _delete_query || CHR(10) || CHR(10) ||
-                                'COMMIT;';
+        _complete_txn   TEXT := _insert_query || CHR(10) || CHR(10) ||
+                                _delete_query;
     BEGIN
         EXECUTE _complete_txn;
         Return True;
