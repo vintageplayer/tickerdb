@@ -17,7 +17,7 @@ $$
                                 CHR(9) ||   'closing_price,' || CHR(10) ||
                                 CHR(9) ||   'volume,' || CHR(10) ||
                                 CHR(9) ||   '(' || CHR(10) ||
-                                CHR(9) || CHR(9) ||  'SELECT max(d.ticker_data_seq_num)' || CHR(10) ||
+                                CHR(9) || CHR(9) ||  'SELECT COALESCE(max(d.ticker_data_seq_num),0)' || CHR(10) ||
                                 CHR(9) || CHR(9) ||  'FROM data.' || _table_name ||' d' || CHR(10) ||
                                 CHR(9) || CHR(9) ||  ') + ROW_NUMBER() OVER(ORDER BY tick_time)' || CHR(10) ||
                                 'FROM' || CHR(10) ||

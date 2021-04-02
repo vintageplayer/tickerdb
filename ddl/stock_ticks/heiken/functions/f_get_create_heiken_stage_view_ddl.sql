@@ -16,8 +16,8 @@ CREATE OR REPLACE FUNCTION heiken.f_get_create_heiken_stage_view_ddl(_interval_u
                                 CHR(9) || CHR(9) || 'd'|| _alias || '.volume,' || CHR(10) ||
                                 CHR(9) || CHR(9) || 'd'|| _alias || '.ticker_data_seq_num' || CHR(10) ||
                                 CHR(9) || 'FROM data.data_'|| _interval_value || '_' || _interval_unit ||'_complete d' || _alias || CHR(10) ||
-                                CHR(9) || 'JOIN heiken.'|| _relation_name ||' h' || _alias || ' on d' || _alias || '.stock_ticker_code = h' || _alias || '.stock_ticker_code AND h' || _alias || '.ticker_data_seq_num = d' || _alias || '.ticker_data_seq_num-1' || CHR(10) ||
-                                CHR(9) || 'WHERE d' || _alias || '.ticker_data_seq_num = (SELECT max(ticker_data_seq_num) FROM heiken.' || _relation_name ||' m) +1' || CHR(10) ||
+                                CHR(9) || 'LEFT JOIN heiken.'|| _relation_name ||' h' || _alias || ' on d' || _alias || '.stock_ticker_code = h' || _alias || '.stock_ticker_code AND h' || _alias || '.ticker_data_seq_num = d' || _alias || '.ticker_data_seq_num-1' || CHR(10) ||
+                                CHR(9) || 'WHERE d' || _alias || '.ticker_data_seq_num = (SELECT COALESCE(max(ticker_data_seq_num),0) FROM heiken.' || _relation_name ||' m) +1' || CHR(10) ||
                                 CHR(9) || 'UNION ALL' || CHR(10) ||
                                 CHR(9) || 'SELECT' || CHR(10) ||
                                 CHR(9) || CHR(9) || 'd'|| _alias || '_r.tick_time,' || CHR(10) ||
