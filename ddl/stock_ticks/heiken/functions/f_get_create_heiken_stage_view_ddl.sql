@@ -3,6 +3,7 @@ CREATE OR REPLACE FUNCTION heiken.f_get_create_heiken_stage_view_ddl(_interval_u
     LANGUAGE plpgsql AS
     $$
     DECLARE
+
         _relation_name  TEXT := 'heiken_' || _interval_value || '_' || _interval_unit;
         _alias          TEXT := _interval_value || LEFT(_interval_unit, 1);
         _view_query     TEXT := 'with recursive heiken_data AS (' || CHR(10) ||
@@ -11,7 +12,7 @@ CREATE OR REPLACE FUNCTION heiken.f_get_create_heiken_stage_view_ddl(_interval_u
                                 CHR(9) || CHR(9) || 'd'|| _alias || '.stock_ticker_code,' || CHR(10) ||
                                 CHR(9) || CHR(9) || 'GREATEST(d'|| _alias || '.high_price, ((h'|| _alias || '.ha_open+h' || _alias || '.ha_close)/2), ((d'|| _alias || '.opening_price+d'|| _alias || '.high_price+d'|| _alias || '.low_price+d'|| _alias || '.closing_price)/4)) as ha_high,' || CHR(10) ||
                                 CHR(9) || CHR(9) || 'LEAST(d'|| _alias || '.low_price, ((h'|| _alias || '.ha_open+h'|| _alias || '.ha_close)/2), ((d'|| _alias || '.opening_price+d'|| _alias || '.high_price+d'|| _alias || '.low_price+d'|| _alias || '.closing_price)/4)) as ha_low,' || CHR(10) ||
-                                CHR(9) || CHR(9) || '(h'|| _alias || '.ha_open+h'|| _alias || '.ha_close)/2 as ha_open,' || CHR(10) ||
+                                CHR(9) || CHR(9) || 'COALESCE((h'|| _alias || '.ha_open+h'|| _alias || '.ha_close),(d'|| _alias ||'.opening_price+d'|| _alias ||'.closing_price))/2 as ha_open,' || CHR(10) ||
                                 CHR(9) || CHR(9) || '(d'|| _alias || '.opening_price+d'|| _alias || '.high_price+d'|| _alias || '.low_price+d'|| _alias || '.closing_price)/4 as ha_close,' || CHR(10) ||
                                 CHR(9) || CHR(9) || 'd'|| _alias || '.volume,' || CHR(10) ||
                                 CHR(9) || CHR(9) || 'd'|| _alias || '.ticker_data_seq_num' || CHR(10) ||
