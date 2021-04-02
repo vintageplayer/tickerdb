@@ -23,6 +23,5 @@ $$
     BEGIN
         EXECUTE _complete_txn;
         Return True;
---         return _complete_txn;
     END;
 $$
