@@ -11,8 +11,8 @@ $$
                                 'SELECT' || CHR(10) ||
                                 CHR(9) || _alias || '.tick_time,' || CHR(10) ||
                                 CHR(9) || _alias || '.stock_ticker_code,' || CHR(10) ||
-                                CHR(9) || _alias || '.ha_high,' || CHR(10) ||
                                 CHR(9) || _alias || '.ha_open,' || CHR(10) ||
+                                CHR(9) || _alias || '.ha_high,' || CHR(10) ||
                                 CHR(9) || _alias || '.ha_low,' || CHR(10) ||
                                 CHR(9) || _alias || '.ha_close,' || CHR(10) ||
                                 CHR(9) || _alias || '.volume,' || CHR(10) ||
