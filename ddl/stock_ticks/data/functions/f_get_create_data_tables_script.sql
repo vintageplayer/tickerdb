@@ -17,7 +17,9 @@ AS
                         CHR(9) || ',created_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
                         CHR(9) || ',updated_at BIGINT NOT NULL DEFAULT f_get_epochmillis(clock_timestamp())' || CHR(10) ||
                         CHR(9) || ',UNIQUE (stock_ticker_code, tick_time)' || CHR(10) ||
-                        CHR(9) || ',UNIQUE (stock_ticker_code, ticker_data_seq_num)';
+                        CHR(9) || ',UNIQUE (stock_ticker_code, ticker_data_seq_num)' || CHR(10) ||
+                        CHR(9) || ',FOREIGN KEY (stock_ticker_code) REFERENCES config.ticker_information(ticker_code)';
+
     _create_data_table_ddl TEXT := 'CREATE TABLE data.' || _data_table_name || '(' ||CHR(10) ||
                                 _column_ddl || CHR(10) ||
                                 ');';
